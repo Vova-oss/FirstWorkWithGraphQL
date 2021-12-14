@@ -1,0 +1,22 @@
+version: '3.1'
+services:
+
+  app:
+    build: ./
+    ports:
+      - "7777:7777"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
+    depends_on:
+      - postgresqldb
+
+  postgresqldb:
+    image: postgres:13.4
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
