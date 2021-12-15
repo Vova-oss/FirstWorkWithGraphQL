@@ -9,6 +9,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=admin
+    volumes:
+      - ./config.graphql:/config.graphql
     depends_on:
       - postgresqldb
 

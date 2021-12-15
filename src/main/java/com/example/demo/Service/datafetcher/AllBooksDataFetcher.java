@@ -20,3 +20,4 @@ public class AllBooksDataFetcher implements DataFetcher<List<Book>> {
         return bookRepository.findAll();
     }
 }
+

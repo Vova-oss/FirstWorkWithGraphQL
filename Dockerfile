@@ -11,4 +11,4 @@ RUN mvn clean install -DskipTests=true
 
 
 # запуск jar файла при помощи команды java -jar app.jar
-CMD ["java","-jar","/home/app/target/DB-0.0.1-SNAPSHOT.jar"]
+CMD ["java","-jar","/home/app/target/demo-0.0.1-SNAPSHOT.jar"]

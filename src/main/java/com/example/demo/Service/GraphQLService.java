@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.Entity.Book;
 import com.example.demo.Repository.BookRepository;
 import com.example.demo.Service.datafetcher.AllBooksDataFetcher;
 import com.example.demo.Service.datafetcher.BookDataFetcher;
@@ -17,12 +18,10 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.util.stream.Stream;
 
 @Service
 public class GraphQLService {
-
-    @Value("classpath:config.graphql")
-    Resource resource;
 
     @Autowired
     private BookRepository bookRepository;
@@ -35,14 +34,25 @@ public class GraphQLService {
     private GraphQL graphQL;
 
     @PostConstruct
-    private void loadSchema() throws IOException {
-        // get the schema
-        File schemaFile = resource.getFile();
-        // parse schema
+    private void loadSchema() {
+        loadDataIntoHSQL();
+        File schemaFile = new File(System.getProperty("user.dir").replace('\\', '/') + "/config.graphql");
         TypeDefinitionRegistry typeRegistry = new SchemaParser().parse(schemaFile);
         RuntimeWiring wiring = buildRuntimeWiring();
         GraphQLSchema schema = new SchemaGenerator().makeExecutableSchema(typeRegistry, wiring);
         graphQL = GraphQL.newGraphQL(schema).build();
+    }
+
+    private void loadDataIntoHSQL() {
+
+        Stream.of(
+                new Book(1L,"Дом в овраге", "Александр Варго", "Мистика"),
+                new Book(2L,"Три товарища", "Эрих Мария Ремарк", "Роман"),
+                new Book(3L,"О дивный новый мир", "Олдос Хаксли", "Утопия")
+
+        ).forEach(book -> {
+            bookRepository.save(book);
+        });
     }
 
     private RuntimeWiring buildRuntimeWiring() {
